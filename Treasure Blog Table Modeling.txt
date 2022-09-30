@@ -1,0 +1,49 @@
+Table Modeling
+
+[TBLTreasure]
+- Idx : 번호 (PK) not null identity (1씩 자동 증가)
+- Title : 제목
+- Content : 내용
+- UpperCategory : 대주제
+- SubCategory : 소주제
+- DetailCategory : 소주제
+- WirteTime: 작성 시간
+- UpdateTime : 수정 시간
+- Author : 저자 
+
+[AboutTreasureCategory]
+- CategoryIdx
+- UpperCategoryCode
+- UpperCategoryName
+- SubCategoryCode
+- SubCategoryName
+- DetailCategoryCode
+- DetailCategoryName
+
+1 원서 1
+2	1 경쟁률, 1
+3	1 JX, 2
+4	1 예외처리3 
+5	1	      3출력물 1
+6	1	      3전산파일2
+7	1	      3수험번호3
+8	1	      3중복지원4
+9	1	      3결제전5
+10	1	    3결제후6
+11	1	    3결제료7
+12	1 기타 4
+13	1	4 NonObject1
+14	1	4 원서 데이터 오류 검증2
+15	1	4 오즈3
+16 대학관리자2
+17 내부관리자3
+18 입학상담앱4
+19	4기초 1
+20	4관리자 2
+21	4예외처리 3
+22	4배포 4
+23 내신산출5
+24 PIMS 6
+25 대학별 특이사항 7
+26 콜/ENS/원격제어 8
+27 Host Sample 9
