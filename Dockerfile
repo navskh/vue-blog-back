@@ -20,4 +20,4 @@ COPY --from=dependencies /treasure-blog-server/node_modules ./node_modules
 COPY ./src ./src
 # Expose PORT and define CMD
 EXPOSE 3000
-CMD ["sh", "-c", "npm run dev"]
+CMD ["sh", "-c", "npm run start"]
