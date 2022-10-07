@@ -5,7 +5,7 @@ RUN mkdir /treasure-blog-server
 WORKDIR /treasure-blog-server
 # Package Copy
 COPY package.json .
-COPY .env.local .
+COPY .env .
 # Environment Variable Setting
 # ARG NODE_ENV
 # ENV NODE_ENV=${NODE_ENV}
