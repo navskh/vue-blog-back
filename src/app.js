@@ -3,7 +3,7 @@ import cors from 'cors';
 import Router from './routes/index.js';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import docs from '../docs/docs.js';
+import docs from './docs/docs.js';
 
 const app = express();
 const port = 3002;
