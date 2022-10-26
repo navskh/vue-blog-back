@@ -46,7 +46,7 @@ const encrypt = text => {
 // var real = {
 //   user: 'bankweb',
 //   password: 'Rkwk!dnl',
-//   server: '192.168.2.18',
+//   server: '192.168.2.13',
 //   database: 'UnivManage',
 //   port: 1433,
 //   synchronize: true,
