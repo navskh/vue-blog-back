@@ -7,7 +7,7 @@ WORKDIR /treasure-blog-server
 COPY package.json .
 COPY .env .
 COPY .env.development .
-COPY .env.production .
+COPY .env.local .
 # Environment Variable Setting
 # ARG NODE_ENV
 # ENV NODE_ENV=${NODE_ENV}
