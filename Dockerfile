@@ -9,8 +9,8 @@ COPY .env .
 COPY .env.development .
 COPY .env.local .
 # Environment Variable Setting
-# ARG NODE_ENV
-# ENV NODE_ENV=${NODE_ENV}
+ARG NODE_ENV
+ENV NODE_ENV=${NODE_ENV}
 # Dependencies
 FROM base AS dependencies
 # Node Packages Setup
