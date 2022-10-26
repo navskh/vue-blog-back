@@ -13,7 +13,7 @@ if (process.env.NODE_ENV == 'development') {
     path: path.join(__dirname, `../../.env.development`),
   });  
 }
-else if (process.env.NODE_ENV == 'production') {
+else if (process.env.NODE_ENV == 'real') {
   console.log('real!');
 
   dotenv.config({

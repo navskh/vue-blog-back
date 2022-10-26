@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "cross-env NODE_ENV=development nodemon ./src/app.js",
-    "real": "cross-env NODE_ENV=production nodemon ./src/app.js",
+    "real": "cross-env NODE_ENV=real nodemon ./src/app.js",
 		"start": "cross-env nodemon ./src/app.js"
 	},
 	"author": "",

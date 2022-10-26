@@ -10,7 +10,7 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 
-else if (process.env.NODE_ENV == 'production') {
+else if (process.env.NODE_ENV == 'real') {
   dotenv.config({
     path: path.join(__dirname, `../../.env.local`),
   });
