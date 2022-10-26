@@ -1,17 +1,37 @@
-import sql from 'mssql';
-import path from 'path';
-import { decrypt } from './crypto.js';
+const sql = require('mssql');
+const path = require('path');
+const { decrypt } = require('./crypto.js');
+const dotenv = require('dotenv');
+
+console.log(process.env.NODE_ENV);
+
+
+if (process.env.NODE_ENV == 'development') {
+  console.log('dev!');
+  console.log(__dirname);
+  dotenv.config({
+    path: path.join(__dirname, `../../.env.development`),
+  });  
+}
+else if (process.env.NODE_ENV == 'production') {
+  console.log('real!');
+
+  dotenv.config({
+    path: path.join(__dirname, `../../.env.local`),
+  });
+}
 
 const config = JSON.parse(decrypt(process.env.TREASURE_DB));
-export const poolPromise = new sql.ConnectionPool(config)
+console.log(config);
+const poolPromise = new sql.ConnectionPool(config)
 	.connect()
 	.then(pool => {
 		console.log(`SQL SERVER: ${config.server} connect success!`);
 		return pool;
 	})
-	.catch(err => console.error('Error creating connection pool', err));
-
-export async function execProcedure(procName, params, isSets) {
+  .catch(err => console.error('Error creating connection pool', err));
+  
+async function execProcedure(procName, params, isSets) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -33,7 +53,7 @@ export async function execProcedure(procName, params, isSets) {
 	}
 }
 
-export async function execQuery(Query) {
+async function execQuery(Query) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -48,7 +68,7 @@ export async function execQuery(Query) {
 	}
 }
 
-export async function execQuery2(Query) {
+async function execQuery2(Query) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -60,4 +80,11 @@ export async function execQuery2(Query) {
 		const errorObject = { error: true, message: error };
 		throw errorObject;
 	}
+}
+
+module.exports = {
+  execProcedure,
+  execQuery,
+  execQuery2,
+  poolPromise
 }

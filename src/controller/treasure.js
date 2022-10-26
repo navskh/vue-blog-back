@@ -1,6 +1,6 @@
-import { execQuery, execProcedure, execQuery2 } from '../utils/db.js';
+const { execProcedure,execQuery,execQuery2,} = require('../utils/db.js');
 
-export default class TreasureController {
+class TreasureController {
 	async getList(condition) {
 		var query = `select 
       idx,
@@ -159,3 +159,5 @@ export default class TreasureController {
 		}
 	}
 }
+
+module.exports = TreasureController;

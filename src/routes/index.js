@@ -1,7 +1,7 @@
-import express from 'express';
-import Treasure from './treasure.js';
+const express = require('express');
+const Treasure = require('./treasure.js');
 const router = express.Router();
 
 router.use('/treasure', Treasure);
 
-export default router;
+module.exports = router;

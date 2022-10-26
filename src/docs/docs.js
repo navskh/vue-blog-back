@@ -1,6 +1,6 @@
-import swaggerUi from 'swagger-ui-express';
-import { Router } from 'express';
-import { loginDocument } from './admin-login.js';
+const swaggerUi = require('swagger-ui-express');
+const { Router } = require('express');
+const { loginDocument } = require('./admin-login.js');
 
 const router = Router();
 
@@ -10,4 +10,4 @@ router.use(
 	swaggerUi.setup(loginDocument),
 );
 
-export default router;
+module.exports = router;

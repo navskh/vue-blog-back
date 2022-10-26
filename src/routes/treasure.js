@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require('express');
 
-import TreasureController from '../controller/treasure.js';
+const TreasureController = require('../controller/treasure.js');
 
 const router = express.Router();
 
@@ -44,4 +44,4 @@ router.delete('/delete', async (req, res) => {
 	res.send(response);
 });
 
-export default router;
+module.exports = router;

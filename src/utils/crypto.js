@@ -1,16 +1,26 @@
-import crypto from 'crypto';
-import path from 'path';
-const __dirname = path.resolve();
-import dotenv from 'dotenv';
+const crypto = require('crypto');
+const path = require('path');
+// const __dirname = path.resolve();
+const dotenv = require('dotenv');
 
-dotenv.config({
-  path: path.join(__dirname, `/.env`),
-});
+if (process.env.NODE_ENV == 'development') {
+  dotenv.config({
+    path: path.join(__dirname, `../../.env.development`),
+  });  
+}
+
+
+else if (process.env.NODE_ENV == 'production') {
+  dotenv.config({
+    path: path.join(__dirname, `../../.env.local`),
+  });
+}
+
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 const IV_LENGTH = 16;
 
-export const encrypt = text => {
+const encrypt = text => {
   let iv = crypto.randomBytes(IV_LENGTH);
   let cipher = crypto.createCipheriv(
     'aes-256-cbc',
@@ -21,6 +31,7 @@ export const encrypt = text => {
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return iv.toString('hex') + ':' + encrypted.toString('hex');
 };
+
 // var a = {
 //   server: '10.1.4.101',
 //   port: 1433,
@@ -30,10 +41,22 @@ export const encrypt = text => {
 //   synchronize: true,
 //   trustServerCertificate: true,
 // };
-
 // console.log(encrypt(JSON.stringify(a)));
 
-export const decrypt = enc => {
+// var real = {
+//   user: 'bankweb',
+//   password: 'Rkwk!dnl',
+//   server: '192.168.2.18',
+//   database: 'UnivManage',
+//   port: 1433,
+//   synchronize: true,
+//   trustServerCertificate: true,
+// };
+
+// console.log(encrypt(JSON.stringify(real)));
+
+
+const decrypt = enc => {
   let textParts = enc.split(':');
   let iv = Buffer.from(textParts.shift(), 'hex');
   let encryptedText = Buffer.from(textParts.join(':'), 'hex');
@@ -45,3 +68,8 @@ export const decrypt = enc => {
   let decrypted = decipher.update(encryptedText);
   return Buffer.concat([decrypted, decipher.final()]).toString();
 };
+
+module.exports = {
+  decrypt,
+  encrypt
+}

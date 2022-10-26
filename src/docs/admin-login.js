@@ -1,4 +1,4 @@
-export let loginDocument = {
+let loginDocument = {
 	swagger: '2.0',
 	info: {
 		title: 'TREASURE-BACK 문서',
@@ -108,3 +108,5 @@ export let loginDocument = {
 		},
 	},
 };
+
+module.exports = { loginDocument };

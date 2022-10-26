@@ -1,9 +1,9 @@
-import express from 'express';
-import cors from 'cors';
-import Router from './routes/index.js';
-import bodyParser from 'body-parser';
-import morgan from 'morgan';
-import docs from './docs/docs.js';
+const express = require('express');
+const cors = require('cors');
+const Router = require('./routes/index.js');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const docs = require('./docs/docs.js');
 
 const app = express();
 const port = 3002;
