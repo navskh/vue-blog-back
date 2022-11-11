@@ -4,6 +4,12 @@ const TreasureController = require('../controller/treasure.js');
 
 const router = express.Router();
 
+router.get('/notice', async (req, res) => {
+	const controller = new TreasureController();
+	const response = await controller.getNotices();
+	res.send(response);
+});
+
 router.get('/list', async (req, res) => {
 	const controller = new TreasureController();
 	const response = await controller.getList(req.query.condition);
