@@ -56,17 +56,21 @@ class TreasureController {
     and tt.DetailCategory = atc.DetailCategoryCode
     `;
 
-		var where = `where Author <> '공지'`;
+    var where = `where Author <> '공지' `;
+    
+    console.log(condition);
+    if (condition[1] == '전화 요청') where += ` and SubCategoryName = '전화 요청'`;
+    else where += ` and SubCategoryName <> '전화 요청'`;
+
     if (condition[3] == '') {
-			if (condition[0] != '전체' && condition[0] != '기타')
+      if (condition[0] != '전체' && condition[0] != '기타')
         where += ` and UpperCategoryName = '${condition[0]}' `;
       if (condition[0] == '기타')
         where += ` and UpperCategoryName = '전체' `;
       if (condition[1] != '전체')
-				where += ` and SubCategoryName = '${condition[1]}' `;
-			if (condition[2] != '전체')
+        where += ` and SubCategoryName = '${condition[1]}' `;
+      if (condition[2] != '전체')
         where += ` and DetailCategoryName = '${condition[2]}' `;
-      
 		} else {
 			where += ` and Title like '%${condition[3]}%' or TreasureContent like '%${condition[3]}%'`;
     }
