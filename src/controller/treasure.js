@@ -172,9 +172,13 @@ class TreasureController {
 		}
 	}
 
-	async editContent(data) {
+  async editContent(data) {
+    console.log(data);
 		var query = `Update TBLTreasure 
                 set 
+                  UpperCategory = '${data.thisUpper}',
+                  SubCategory = '${data.thisSub}',
+                  DetailCategory = '${data.thisDetail}',
                   Title = '${data.headTitle}', 
                   TreasureContent = '${data.content}', 
                   UpdateTime = getDate(),
