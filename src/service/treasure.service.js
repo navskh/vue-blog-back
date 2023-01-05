@@ -1,8 +1,8 @@
-const { execProcedure,execQuery,execQuery2,} = require('../utils/db.js');
+const { execProcedure,execQuery,execTransactionQuery,} = require('../utils/db.js');
 
-class TreasureController {
+class TreasureService {
   async getNotices() {
-		var query = `Select 
+    var query = `Select 
       idx,
       Title,
       TreasureContent,
@@ -25,18 +25,14 @@ class TreasureController {
 		var where = `where Author = '공지'`;
 
 		var order = ' order by isnull(UpdateTime, writetime) desc';
-		query = query + where + order;
+    query = query + where + order;
+    
+    var response = await execQuery(query);
+    return response;
+  }
 
-		try {
-			var response = await execQuery(query);
-			var data = [...response];
-			return data;
-		} catch (err) {
-			console.log(err);
-		}
-	}
-	async getList(condition) {
-		var query = `Select 
+  async getList(condition) {
+    var query = `Select 
       idx,
       Title,
       TreasureContent,
@@ -56,40 +52,34 @@ class TreasureController {
     and tt.DetailCategory = atc.DetailCategoryCode
     `;
 
-    var where = `where Author <> '공지' `;
-    
-    console.log(condition);
-    if (condition[1] == '전화 요청') where += ` and SubCategoryName = '전화 요청'`;
-    else where += ` and SubCategoryName <> '전화 요청'`;
+		var where = `where Author <> '공지' `;
 
-    if (condition[3] == '') {
-      if (condition[0] != '전체' && condition[0] != '기타')
-        where += ` and UpperCategoryName = '${condition[0]}' `;
-      if (condition[0] == '기타')
-        where += ` and UpperCategoryName = '전체' `;
-      if (condition[1] != '전체')
-        where += ` and SubCategoryName = '${condition[1]}' `;
-      if (condition[2] != '전체')
-        where += ` and DetailCategoryName = '${condition[2]}' `;
+		if (condition[1] == '전화 요청')
+			where += ` and SubCategoryName = '전화 요청'`;
+		else where += ` and SubCategoryName <> '전화 요청'`;
+
+		if (condition[3] == '') {
+			if (condition[0] != '전체' && condition[0] != '기타')
+				where += ` and UpperCategoryName = '${condition[0]}' `;
+			if (condition[0] == '기타') where += ` and UpperCategoryName = '전체' `;
+			if (condition[1] != '전체')
+				where += ` and SubCategoryName = '${condition[1]}' `;
+			if (condition[2] != '전체')
+				where += ` and DetailCategoryName = '${condition[2]}' `;
 		} else {
 			where += ` and Title like '%${condition[3]}%' or TreasureContent like '%${condition[3]}%'`;
-    }
-    
+		}
 
 		var order = ' order by writetime desc';
-		query = query + where + order;
+    query = query + where + order;
+    
+    var response = await execQuery(query);
 
-		try {
-			var response = await execQuery(query);
-			var data = [...response];
-			return data;
-		} catch (err) {
-			console.log(err);
-		}
-	}
+    return response;
+  }
 
-	async getContent(idx) {
-		var query = `select 
+  async getContent(idx) {
+    var query = `select 
       idx,
       Title,
       TreasureContent,
@@ -109,17 +99,12 @@ class TreasureController {
     and tt.DetailCategory = atc.DetailCategoryCode
     where idx = ${idx}`;
 
-		try {
-			var response = await execQuery(query);
-			var data = [...response];
-			return data;
-		} catch (err) {
-			console.log(err);
-		}
-	}
+    var response = await execQuery(query);
+    return response;
+  }
 
-	async getCategory(type, condition) {
-		var query = `select 
+  async getCategory(type, condition) {
+    var query = `select 
       distinct
       ${type}Code as Code,
       ${type}Name as Name
@@ -134,15 +119,14 @@ class TreasureController {
 		} else if (type == 'DetailCategory' && strCondition.subCategoryCode != 0) {
 			where = ` and UpperCategoryCode = ${strCondition.upperCategoryCode} and SubCategoryCode = ${strCondition.subCategoryCode}`;
 		}
-		query = query + where;
-		var response = await execQuery(query);
+    query = query + where;
 
-		var data = [...response];
-		return data;
-	}
+    var response = await execQuery(query);
+    return response;
+  }
 
-	async setContent(data) {
-		var query = `Insert into TBLTreasure 
+  async setContent(data) {
+    var query = `Insert into TBLTreasure 
                 (
                   Title, 
                   TreasureContent, 
@@ -163,18 +147,13 @@ class TreasureController {
                   '${data.author}'
                 )
                 `;
-		try {
-			var response = await execQuery2(query);
-			console.log(response);
-			return response;
-		} catch (err) {
-			console.log(err);
-		}
-	}
+    
+    var response = await execTransactionQuery(query);
+    return response;
+  }
 
   async editContent(data) {
-    console.log(data);
-		var query = `Update TBLTreasure 
+    var query = `Update TBLTreasure 
                 set 
                   UpperCategory = '${data.thisUpper}',
                   SubCategory = '${data.thisSub}',
@@ -185,25 +164,15 @@ class TreasureController {
                   Author = '${data.author}'
                 Where Idx = ${data.idx}
                 `;
-		try {
-			var response = await execQuery2(query);
-			console.log(response);
-			return response;
-		} catch (err) {
-			console.log(err);
-		}
-	}
+      var response = await execTransactionQuery(query);
+      return response;
+  }
 
-	async deleteContent(idx) {
+  async deleteContent(idx) {
 		var query = `Delete TBLTreasure Where Idx = ${idx}`;
-		try {
-			var response = await execQuery2(query);
-			console.log(response);
-			return response;
-		} catch (err) {
-			console.log(err);
-		}
-	}
+    var response = await execTransactionQuery(query);
+    return response;
+  }
 }
 
-module.exports = TreasureController;
+module.exports = TreasureService;

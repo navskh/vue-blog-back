@@ -68,7 +68,7 @@ async function execQuery(Query) {
 	}
 }
 
-async function execQuery2(Query) {
+async function execTransactionQuery(Query) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -85,6 +85,6 @@ async function execQuery2(Query) {
 module.exports = {
   execProcedure,
   execQuery,
-  execQuery2,
+  execTransactionQuery,
   poolPromise
 }

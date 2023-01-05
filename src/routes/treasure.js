@@ -1,6 +1,6 @@
 const express = require('express');
 
-const TreasureController = require('../controller/treasure.js');
+const TreasureController = require('../controller/treasure.controller.js');
 
 const router = express.Router();
 
@@ -38,7 +38,7 @@ router.post('/post', async (req, res) => {
 });
 
 router.post('/edit', async (req, res) => {
-	console.log(req);
+	console.log(req.body);
 	const controller = new TreasureController();
 	const response = await controller.editContent(req.body);
 	res.send(response);
