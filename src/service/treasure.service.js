@@ -31,7 +31,7 @@ class TreasureService {
     return response;
   }
 
-  async getList(condition) {
+  async getList(condition, mode) {
     var query = `Select 
       idx,
       Title,
@@ -54,11 +54,22 @@ class TreasureService {
 
 		var where = `where Author <> '공지' `;
 
-		if (condition[1] == '전화 요청')
-			where += ` and SubCategoryName = '전화 요청'`;
-		else where += ` and SubCategoryName <> '전화 요청'`;
+    /**
+     * 전화요청/PIMS 예외처리
+     */
+    if (condition[0] == '전화 요청') {
+			where += ` and UpperCategoryName = '전화 요청'`;
+    }
+    else {
+      where += ` and UpperCategoryName <> '전화 요청'`;
+    }
 
-		if (condition[3] == '') {
+    console.log(`condition ${condition}, mode ${mode}`);
+
+    if (condition[3] == '') {
+      if (condition[0] != 'PIMS') {
+        where += ` and UpperCategoryName <> 'PIMS'`;
+      }
 			if (condition[0] != '전체' && condition[0] != '기타')
 				where += ` and UpperCategoryName = '${condition[0]}' `;
 			if (condition[0] == '기타') where += ` and UpperCategoryName = '전체' `;
@@ -66,14 +77,22 @@ class TreasureService {
 				where += ` and SubCategoryName = '${condition[1]}' `;
 			if (condition[2] != '전체')
 				where += ` and DetailCategoryName = '${condition[2]}' `;
-		} else {
-			where += ` and Title like '%${condition[3]}%' or TreasureContent like '%${condition[3]}%'`;
+    } else {
+      console.log(mode);
+      if (mode == 'pims') {
+        where += ` and UpperCategoryName = 'PIMS'  and (Title like '%${condition[3]}%' or TreasureContent like '%${condition[3]}%')`;
+      }
+      else {
+        where += ` and UpperCategoryName <> 'PIMS'  and (Title like '%${condition[3]}%' or TreasureContent like '%${condition[3]}%')`;
+      }
 		}
 
 		var order = ' order by writetime desc';
     query = query + where + order;
     
+    console.log(query);
     var response = await execQuery(query);
+    console.log(`response ${response}`);
 
     return response;
   }
@@ -113,12 +132,14 @@ class TreasureService {
 
 		var where = '';
 
-		var strCondition = JSON.parse(condition);
-		if (type == 'SubCategory' && strCondition.upperCategoryCode != 0) {
-			where = ` and UpperCategoryCode = ${strCondition.upperCategoryCode}`;
-		} else if (type == 'DetailCategory' && strCondition.subCategoryCode != 0) {
-			where = ` and UpperCategoryCode = ${strCondition.upperCategoryCode} and SubCategoryCode = ${strCondition.subCategoryCode}`;
-		}
+    if (condition != '') {
+      var strCondition = JSON.parse(condition);
+      if (type == 'SubCategory' && strCondition.upperCategoryCode != 0) {
+        where = ` and UpperCategoryCode = ${strCondition.upperCategoryCode}`;
+      } else if (type == 'DetailCategory' && strCondition.subCategoryCode != 0) {
+        where = ` and UpperCategoryCode = ${strCondition.upperCategoryCode} and SubCategoryCode = ${strCondition.subCategoryCode}`;
+      }
+    }
     query = query + where;
 
     var response = await execQuery(query);

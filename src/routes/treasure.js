@@ -12,7 +12,7 @@ router.get('/notice', async (req, res) => {
 
 router.get('/list', async (req, res) => {
 	const controller = new TreasureController();
-	const response = await controller.getList(req.query.condition);
+	const response = await controller.getList(req.query.condition, req.query.mode);
 	res.send(response);
 });
 

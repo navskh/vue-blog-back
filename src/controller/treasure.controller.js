@@ -14,9 +14,9 @@ class TreasureController {
 			console.log(`getNotices ERR! ${err}`);
 		}
 	}
-	async getList(condition) {
+	async getList(condition, mode) {
 		try {
-			var response = await treasureService.getList(condition);
+			var response = await treasureService.getList(condition, mode);
 			var data = [...response];
 			return data;
 		} catch (err) {
