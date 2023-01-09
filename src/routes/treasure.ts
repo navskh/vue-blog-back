@@ -4,6 +4,12 @@ const TreasureController = require('../controller/treasure.controller.ts');
 
 const routerT = express.Router();
 
+routerT.get('/reqdetail', async (req: express.Request, res: express.Response) => {
+	const controller = new TreasureController();
+	const response = await controller.getRequestById(req.query.id);
+	res.send(response);
+});
+
 routerT.get('/request', async (req: express.Request, res: express.Response) => {
 	const controller = new TreasureController();
 	const response = await controller.getRequestLists();

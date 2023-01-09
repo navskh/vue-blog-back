@@ -7,23 +7,71 @@ const {
 } = require('../utils/db.ts');
 
 export default class TreasureService {
-  async getRequestLists(): Promise<any> {
-    console.log('call!');
+  async getRequestById(idx: number): Promise<any> {
     var query = `
-    Select 
-      Writer + '/' + Processor as 'Author',
+    SELECT
+      ISNULL(Writer + '/' + Processor, '작자미상') + 
+      Case 
+        When ProcessStatus = 'ProcessComplete' 
+        Then ' <span class="badge badgeinfo ">완료</span> '
+        When ProcessStatus = 'ProcessCancel' 
+        Then ' <span class="badge badgeerror">불가</span> '
+        When ProcessStatus = 'Request' 
+        Then ' <span class="badge badgewarning">요청</span> '
+        Else ''
+      End
+      as 'Author',
       '0' as 'DetailCategory',
       '전체' as 'DetailCategoryName',
       '0' as 'SubCategory',
       '전체' as 'SubCategoryName',
       '11' as 'UpperCategory',
       '업무요청게시판' as 'UpperCategoryName',
-      Title,
+      '[' + UnivServiceID + '] ' + Title as Title,
+      Case 
+        When ProcessStatus = 'ProcessComplete' and Comment <> ''
+          Then '<font style="font-weight: bold;color:blue"> 답변 : ' + Comment + '</font> <br><br>'
+        When ProcessStatus = 'ProcessCancel' and Comment <> ''
+          Then '<font style="font-weight: bold;color:red"> 답변 : ' + Comment + '</font> <br><br>'
+        Else ''
+      End
+      + Contents as 'TreasureContent',
+      Mdate as 'UpdateTime',
+      RDate as 'WriteTime',
+      Idx as 'idx'
+    from PIMS_Statistics.dbo.TBL_Request
+    Where Idx = ${idx}`;
+
+		var response = await execQuery(query);
+		return response;
+  }
+
+  async getRequestLists(): Promise<any> {
+    var query = `
+    Select 
+      IsNull(Writer + '/' + Processor, '몰라용') as 'Author',
+      '0' as 'DetailCategory',
+      '전체' as 'DetailCategoryName',
+      '0' as 'SubCategory',
+      '전체' as 'SubCategoryName',
+      '11' as 'UpperCategory',
+      '업무요청게시판' as 'UpperCategoryName',
+      Case 
+        When ProcessStatus = 'ProcessComplete' 
+        Then '<span class="badge badgeinfo ">완료</span> '
+        When ProcessStatus = 'ProcessCancel' 
+        Then '<span class="badge badgeerror">불가</span> '
+        When ProcessStatus = 'Request' 
+        Then '<span class="badge badgewarning">요청</span> '
+        Else ''
+      End +
+      Title as Title,
       Contents as 'TreasureContent',
       Mdate as 'UpdateTime',
       RDate as 'WriteTime',
       Idx as 'idx'
     from PIMS_Statistics.dbo.TBL_Request
+    Order By Idx Desc
     `
     var response = await execQuery(query);
     return response;
@@ -85,17 +133,20 @@ export default class TreasureService {
 		/**
 		 * 전화요청/PIMS 예외처리
 		 */
-		if (condition[0] == '전화 요청') {
-			where += ` and UpperCategoryName = '전화 요청'`;
-		} else {
-			where += ` and UpperCategoryName <> '전화 요청'`;
-		}
+		// if (condition[0] == '전화 요청') {
+		// 	where += ` and UpperCategoryName = '전화 요청'`;
+		// } else {
+		// 	where += ` and UpperCategoryName <> '전화 요청'`;
+		// }
 
 		// console.log(`condition ${condition}, mode ${mode}`);
 
 		if (condition[3] == '') {
 			if (condition[0] != 'PIMS') {
 				where += ` and UpperCategoryName <> 'PIMS'`;
+      }
+      if (condition[0] != '전화 요청') {
+				where += ` and UpperCategoryName <> '전화 요청'`;
 			}
 			if (condition[0] != '전체' && condition[0] != '기타')
 				where += ` and UpperCategoryName = '${condition[0]}' `;
@@ -116,7 +167,7 @@ export default class TreasureService {
 		var order = ' order by writetime desc';
 		query = query + where + order;
 
-		// console.log(query);
+		console.log(query);
 		var response = await execQuery(query);
 		// console.log(`response ${response}`);
 
