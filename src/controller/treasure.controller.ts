@@ -4,6 +4,15 @@ import TreasureService from '../service/treasure.service';
 const treasureService = new TreasureService();
 
 class TreasureController {
+  async getRequestLists(): Promise<any> {
+		try {
+			var response = await treasureService.getRequestLists();
+			var data = [...response];
+			return data;
+		} catch (err) {
+			console.log(`getRequestLists ERR! ${err}`);
+		}
+  }
 	async getNotices(): Promise<any> {
 		try {
 			var response = await treasureService.getNotices();

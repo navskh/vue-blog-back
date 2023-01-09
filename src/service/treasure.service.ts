@@ -7,6 +7,28 @@ const {
 } = require('../utils/db.ts');
 
 export default class TreasureService {
+  async getRequestLists(): Promise<any> {
+    console.log('call!');
+    var query = `
+    Select 
+      Writer + '/' + Processor as 'Author',
+      '0' as 'DetailCategory',
+      '전체' as 'DetailCategoryName',
+      '0' as 'SubCategory',
+      '전체' as 'SubCategoryName',
+      '11' as 'UpperCategory',
+      '업무요청게시판' as 'UpperCategoryName',
+      Title,
+      Contents as 'TreasureContent',
+      Mdate as 'UpdateTime',
+      RDate as 'WriteTime',
+      Idx as 'idx'
+    from PIMS_Statistics.dbo.TBL_Request
+    `
+    var response = await execQuery(query);
+    return response;
+  }
+
 	async getNotices(): Promise<any> {
 		var query = `Select 
       idx,
