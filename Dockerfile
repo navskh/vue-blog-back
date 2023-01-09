@@ -14,6 +14,7 @@ ENV NODE_ENV=${NODE_ENV}
 # Dependencies
 FROM base AS dependencies
 # Node Packages Setup
+RUN npm cache clean --force
 RUN npm set progress=false && npm config set depth 0
 RUN npm install
 # Builder
