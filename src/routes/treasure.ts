@@ -1,28 +1,28 @@
-const express = require('express');
+import * as express from 'express';
 
-const TreasureController = require('../controller/treasure.controller.js');
+const TreasureController = require('../controller/treasure.controller.ts');
 
-const router = express.Router();
+const routerT = express.Router();
 
-router.get('/notice', async (req, res) => {
+routerT.get('/notice', async (req: express.Request, res) => {
 	const controller = new TreasureController();
 	const response = await controller.getNotices();
 	res.send(response);
 });
 
-router.get('/list', async (req, res) => {
+routerT.get('/list', async (req, res) => {
 	const controller = new TreasureController();
 	const response = await controller.getList(req.query.condition, req.query.mode);
 	res.send(response);
 });
 
-router.get('/detail', async (req, res) => {
+routerT.get('/detail', async (req, res) => {
 	const controller = new TreasureController();
 	const response = await controller.getContent(req.query.id);
 	res.send(response);
 });
 
-router.get('/category', async (req, res) => {
+routerT.get('/category', async (req, res) => {
 	const controller = new TreasureController();
 	const response = await controller.getCategory(
 		req.query.type,
@@ -31,23 +31,23 @@ router.get('/category', async (req, res) => {
 	res.send(response);
 });
 
-router.post('/post', async (req, res) => {
+routerT.post('/post', async (req, res) => {
 	const controller = new TreasureController();
 	const response = await controller.setContent(req.body);
 	res.send(response);
 });
 
-router.post('/edit', async (req, res) => {
+routerT.post('/edit', async (req, res) => {
 	console.log(req.body);
 	const controller = new TreasureController();
 	const response = await controller.editContent(req.body);
 	res.send(response);
 });
 
-router.delete('/delete', async (req, res) => {
+routerT.delete('/delete', async (req, res) => {
 	const controller = new TreasureController();
 	const response = await controller.deleteContent(req.body.idx);
 	res.send(response);
 });
 
-module.exports = router;
+module.exports = routerT;

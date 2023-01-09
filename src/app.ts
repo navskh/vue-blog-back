@@ -1,9 +1,9 @@
-const express = require('express');
-const cors = require('cors');
-const Router = require('./routes/index.js');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const docs = require('./docs/docs.js');
+import * as express from 'express';
+import * as cors from 'cors';
+import * as morgan from 'morgan';
+import { router } from './routes/index';
+import * as bodyParser from 'body-parser';
+// import docs from './docs/docs.js';
 
 const app = express();
 const port = 3002;
@@ -16,8 +16,8 @@ const corsOptions = {
 	origin: '*',
 };
 app.use(cors(corsOptions));
-app.use(Router);
-app.use(docs);
+app.use(router);
+// app.use(docs);
 
 app.listen(port, () => {
 	console.log(`서버가 실행됩니다. http://localhost:${port}`);

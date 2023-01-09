@@ -1,11 +1,10 @@
-const { execProcedure, execQuery, execQuery2 } = require('../utils/db.js');
-
-const TreasureService = require('../service/treasure.service');
+import { PostSchema } from '../schema/treasure.shema';
+import TreasureService from '../service/treasure.service';
 
 const treasureService = new TreasureService();
 
 class TreasureController {
-	async getNotices() {
+	async getNotices(): Promise<any> {
 		try {
 			var response = await treasureService.getNotices();
 			var data = [...response];
@@ -14,7 +13,7 @@ class TreasureController {
 			console.log(`getNotices ERR! ${err}`);
 		}
 	}
-	async getList(condition, mode) {
+	async getList(condition: Array<string>, mode: string): Promise<any> {
 		try {
 			var response = await treasureService.getList(condition, mode);
 			var data = [...response];
@@ -24,7 +23,7 @@ class TreasureController {
 		}
 	}
 
-	async getContent(idx) {
+	async getContent(idx: number): Promise<any> {
 		try {
 			var response = await treasureService.getContent(idx);
 			var data = [...response];
@@ -34,7 +33,7 @@ class TreasureController {
 		}
 	}
 
-	async getCategory(type, condition) {
+	async getCategory(type: string, condition: string): Promise<any> {
 		try {
 			var response = await treasureService.getCategory(type, condition);
 			var data = [...response];
@@ -44,7 +43,7 @@ class TreasureController {
 		}
 	}
 
-	async setContent(data) {
+	async setContent(data: PostSchema): Promise<any> {
 		try {
 			var response = await treasureService.setContent(data);
 			return response;
@@ -53,7 +52,7 @@ class TreasureController {
 		}
 	}
 
-	async editContent(data) {
+	async editContent(data: PostSchema): Promise<any> {
 		try {
 			var response = await treasureService.editContent(data);
 			return response;
@@ -62,7 +61,7 @@ class TreasureController {
 		}
 	}
 
-	async deleteContent(idx) {
+	async deleteContent(idx: number): Promise<any> {
 		try {
 			var response = await treasureService.deleteContent(idx);
 			return response;
