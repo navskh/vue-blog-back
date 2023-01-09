@@ -5,20 +5,18 @@ const dotenv = require('dotenv');
 
 console.log(process.env.NODE_ENV);
 
-
 if (process.env.NODE_ENV == 'outterdev') {
-  console.log('dev!');
-  console.log(__dirname);
-  dotenv.config({
-    path: path.join(__dirname, `../../.env.development`),
-  });  
-}
-else if (process.env.NODE_ENV == 'innerdev') {
-  console.log('real!');
+	console.log('dev!');
+	console.log(__dirname);
+	dotenv.config({
+		path: path.join(__dirname, `../../.env.development`),
+	});
+} else if (process.env.NODE_ENV == 'innerdev') {
+	console.log('real!');
 
-  dotenv.config({
-    path: path.join(__dirname, `../../.env.local`),
-  });
+	dotenv.config({
+		path: path.join(__dirname, `../../.env.local`),
+	});
 }
 
 const config = JSON.parse(decrypt(process.env.TREASURE_DB));
@@ -29,8 +27,8 @@ export const poolPromise = new sql.ConnectionPool(config)
 		console.log(`SQL SERVER: ${config.server} connect success!`);
 		return pool;
 	})
-  .catch((err: any) => console.error('Error creating connection pool', err));
-  
+	.catch((err: any) => console.error('Error creating connection pool', err));
+
 export async function execProcedure(procName: any, params: any, isSets: any) {
 	try {
 		const pool = await poolPromise;
