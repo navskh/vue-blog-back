@@ -16,7 +16,6 @@ FROM base AS dependencies
 # Node Packages Setup
 RUN npm cache clean --force
 RUN npm set progress=false && npm config set depth 0
-RUN npm install -g ts-node
 RUN npm install
 # Builder
 FROM base AS builder
