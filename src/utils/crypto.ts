@@ -20,7 +20,7 @@ else if (process.env.NODE_ENV == 'innerdev') {
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 const IV_LENGTH = 16;
 
-const encrypt = text => {
+const encrypt = (text: any) => {
   let iv = crypto.randomBytes(IV_LENGTH);
   let cipher = crypto.createCipheriv(
     'aes-256-cbc',
@@ -60,7 +60,7 @@ const encrypt = text => {
 // console.log(encrypt(JSON.stringify(innerdev)));
 
 
-const decrypt = enc => {
+const decrypt = (enc: any) => {
   let textParts = enc.split(':');
   let iv = Buffer.from(textParts.shift(), 'hex');
   let encryptedText = Buffer.from(textParts.join(':'), 'hex');
