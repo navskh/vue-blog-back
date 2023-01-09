@@ -1,16 +1,16 @@
-const crypto = require('crypto');
+import * as crypto from 'crypto';
 const path = require('path');
 // const __dirname = path.resolve();
 const dotenv = require('dotenv');
 
-if (process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV == 'outterdev') {
   dotenv.config({
     path: path.join(__dirname, `../../.env.development`),
   });  
 }
 
 
-else if (process.env.NODE_ENV == 'real') {
+else if (process.env.NODE_ENV == 'innerdev') {
   dotenv.config({
     path: path.join(__dirname, `../../.env.local`),
   });
@@ -32,7 +32,8 @@ const encrypt = text => {
   return iv.toString('hex') + ':' + encrypted.toString('hex');
 };
 
-// var a = {
+/**외부망 DEV DB 연결 Config */
+// var outterdev = {
 //   server: '10.1.4.101',
 //   port: 1433,
 //   database: 'UnivManage',
@@ -40,10 +41,12 @@ const encrypt = text => {
 //   password: 'A!123456',
 //   synchronize: true,
 //   trustServerCertificate: true,
+//   encrypt: false, 
 // };
-// console.log(encrypt(JSON.stringify(a)));
+// console.log(encrypt(JSON.stringify(outterdev)));
 
-// var real = {
+/**내부망 DEV DB 연결 Config */
+// var innerdev = {
 //   user: 'bankweb',
 //   password: 'A!12345',
 //   server: '192.168.2.13',
@@ -51,9 +54,10 @@ const encrypt = text => {
 //   port: 1433,
 //   synchronize: true,
 //   trustServerCertificate: true,
+//   encrypt: false, 
 // };
 
-// console.log(encrypt(JSON.stringify(real)));
+// console.log(encrypt(JSON.stringify(innerdev)));
 
 
 const decrypt = enc => {

@@ -1,19 +1,19 @@
 const sql = require('mssql');
 const path = require('path');
-const { decrypt } = require('./crypto.js');
+const { decrypt } = require('./crypto.ts');
 const dotenv = require('dotenv');
 
 console.log(process.env.NODE_ENV);
 
 
-if (process.env.NODE_ENV == 'development') {
+if (process.env.NODE_ENV == 'outterdev') {
   console.log('dev!');
   console.log(__dirname);
   dotenv.config({
     path: path.join(__dirname, `../../.env.development`),
   });  
 }
-else if (process.env.NODE_ENV == 'real') {
+else if (process.env.NODE_ENV == 'innerdev') {
   console.log('real!');
 
   dotenv.config({
@@ -23,7 +23,7 @@ else if (process.env.NODE_ENV == 'real') {
 
 const config = JSON.parse(decrypt(process.env.TREASURE_DB));
 console.log(config);
-const poolPromise = new sql.ConnectionPool(config)
+export const poolPromise = new sql.ConnectionPool(config)
 	.connect()
 	.then(pool => {
 		console.log(`SQL SERVER: ${config.server} connect success!`);
@@ -31,7 +31,7 @@ const poolPromise = new sql.ConnectionPool(config)
 	})
   .catch(err => console.error('Error creating connection pool', err));
   
-async function execProcedure(procName, params, isSets) {
+export async function execProcedure(procName, params, isSets) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -53,7 +53,7 @@ async function execProcedure(procName, params, isSets) {
 	}
 }
 
-async function execQuery(Query) {
+export async function execQuery(Query) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -68,7 +68,7 @@ async function execQuery(Query) {
 	}
 }
 
-async function execTransactionQuery(Query) {
+export async function execTransactionQuery(Query) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -80,11 +80,4 @@ async function execTransactionQuery(Query) {
 		const errorObject = { error: true, message: error };
 		throw errorObject;
 	}
-}
-
-module.exports = {
-  execProcedure,
-  execQuery,
-  execTransactionQuery,
-  poolPromise
 }
