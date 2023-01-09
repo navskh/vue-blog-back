@@ -25,13 +25,13 @@ const config = JSON.parse(decrypt(process.env.TREASURE_DB));
 console.log(config);
 export const poolPromise = new sql.ConnectionPool(config)
 	.connect()
-	.then(pool => {
+	.then((pool: any) => {
 		console.log(`SQL SERVER: ${config.server} connect success!`);
 		return pool;
 	})
-  .catch(err => console.error('Error creating connection pool', err));
+  .catch((err: any) => console.error('Error creating connection pool', err));
   
-export async function execProcedure(procName, params, isSets) {
+export async function execProcedure(procName: any, params: any, isSets: any) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -53,7 +53,7 @@ export async function execProcedure(procName, params, isSets) {
 	}
 }
 
-export async function execQuery(Query) {
+export async function execQuery(Query: any) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
@@ -68,7 +68,7 @@ export async function execQuery(Query) {
 	}
 }
 
-export async function execTransactionQuery(Query) {
+export async function execTransactionQuery(Query: any) {
 	try {
 		const pool = await poolPromise;
 		if (!pool) throw Error('No poolPromise');
