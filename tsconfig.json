@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
     "esModuleInterop": true,
-		"typeRoots": ["./node_modules/@types", "./src/customType"]
+		"typeRoots": ["./node_modules/@types", "./src/customType"],
+    "noImplicitAny": false
 	}
 }
